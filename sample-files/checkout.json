@@ -1,0 +1,43 @@
+{
+  "smartling": {
+    "translate_paths": [
+      {
+        "path": "*/value",
+        "key": "{*}/value",
+        "instruction": "*/description"
+      }
+    ]
+  },
+  "cart_summary": {
+    "value": "Your Cart",
+    "description": "Header for the shopping cart page"
+  },
+  "proceed_to_checkout": {
+    "value": "Proceed to Checkout",
+    "description": "Button to move from cart to payment step"
+  },
+  "shipping_address": {
+    "value": "Shipping Address",
+    "description": "Section title for entering delivery address"
+  },
+  "order_total": {
+    "value": "Order Total",
+    "description": "Label for the final price including tax and shipping"
+  },
+  "apply_coupon": {
+    "value": "Apply Coupon",
+    "description": "Button to apply a discount code"
+  },
+  "payment_method": {
+    "value": "Payment Method",
+    "description": "Section title for selecting how to pay"
+  },
+  "order_confirmed": {
+    "value": "Your order has been placed!",
+    "description": "Success message after completing a purchase"
+  },
+  "estimated_delivery": {
+    "value": "Estimated delivery: {date}",
+    "description": "Shows the expected delivery date on the confirmation page"
+  }
+}

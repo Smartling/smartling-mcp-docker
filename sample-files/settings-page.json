@@ -1,0 +1,51 @@
+{
+  "smartling": {
+    "translate_paths": [
+      {
+        "path": "*/value",
+        "key": "{*}/value",
+        "instruction": "*/description"
+      }
+    ]
+  },
+  "account_settings": {
+    "value": "Account Settings",
+    "description": "Page title for the account settings screen"
+  },
+  "change_password": {
+    "value": "Change Password",
+    "description": "Button label to initiate a password change"
+  },
+  "current_password": {
+    "value": "Current Password",
+    "description": "Input field label for the user's existing password"
+  },
+  "new_password": {
+    "value": "New Password",
+    "description": "Input field label for the desired new password"
+  },
+  "confirm_password": {
+    "value": "Confirm Password",
+    "description": "Input field label to re-enter the new password for verification"
+  },
+  "language_preference": {
+    "value": "Language Preference",
+    "description": "Dropdown label for choosing the display language"
+  },
+  "timezone_setting": {
+    "value": "Time Zone",
+    "description": "Dropdown label for selecting the user's time zone"
+  },
+  "email_notifications": {
+    "value": "Email Notifications",
+    "description": "Toggle label for enabling or disabling email alerts"
+  },
+  "delete_account_warning": {
+    "value": "Deleting your account is permanent and cannot be undone.",
+    "description": "Warning message shown before account deletion"
+  },
+  "save_preferences": {
+    "value": "Save Preferences",
+    "description": "Button to save all settings on the preferences page"
+  }
+}

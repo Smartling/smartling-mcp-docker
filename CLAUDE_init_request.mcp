@@ -1,0 +1,111 @@
+I need you to help me implement the first iteration of a Dockerized MCP server for Smartling-related local file workflows in a Node.js / TypeScript project.
+
+Context:
+- This MCP server is meant to run locally in Docker.
+- The first goal is intentionally small: only support working with a sample folder, listing files from it, and uploading a selected file to Smartling.
+- I want a practical MVP, not a big framework.
+- Please assume you have access to my workplace GitHub and Atlassian, so you should first inspect existing internal repositories, docs, tickets, or prior experiments that may already solve part of this problem.
+- I suspect there may already be a Smartling MCP or something similar internally or in related repos. Please verify that first before building from scratch.
+- If there is an existing Smartling MCP / local file MCP / translation workflow MCP / internal Smartling integration, I want you to evaluate whether we can reuse, fork, extend, or copy patterns from it instead of inventing everything from zero.
+
+What I want from you:
+1. First, investigate whether there is already:
+   - an MCP server related to Smartling,
+   - an MCP server for local file access,
+   - a Dockerized MCP example we can reuse,
+   - any internal translation/file-upload tooling already used by the company,
+   - any Smartling API wrappers or shared libraries already present in our repos.
+
+2. Summarize findings clearly:
+   - what already exists,
+   - where it lives,
+   - whether it is production-ready / experimental / abandoned,
+   - whether it can be reused for this task,
+   - what exact parts are useful for our MVP.
+
+3. Then implement the first MVP only if reuse is not sufficient, or build on top of existing code if it is.
+
+MVP scope:
+- Node.js + TypeScript
+- Dockerized MCP server
+- Local sample folder mounted into container
+- Tool 1: list files from allowed sample folder
+- Tool 2: upload selected file to Smartling
+- Keep scope narrow and secure
+
+Functional requirements:
+- The MCP server should expose a tool to list files in a configured local directory, for example `/workspace/input`
+- The MCP server should expose a tool to upload one selected file from that directory to Smartling
+- Only files inside the allowed root folder may be accessed
+- Path traversal must be blocked
+- The implementation should be simple and understandable
+- Use environment variables for Smartling credentials and config
+- Prefer read-only access to mounted input folder where possible
+
+Security requirements:
+- Never allow arbitrary filesystem access outside the configured root
+- Normalize and validate all paths
+- Keep secrets in env vars only
+- Do not hardcode tokens
+- Keep network calls limited to Smartling APIs only if practical
+- Log safely without leaking sensitive data
+
+Technical preferences:
+- TypeScript
+- Clean folder structure
+- Small number of tools
+- Clear separation between:
+  - MCP server registration
+  - local file service
+  - Smartling API service
+  - validation / path safety utilities
+
+Please produce:
+1. A short investigation summary of any existing relevant internal projects/tools
+2. A recommended approach: reuse existing project vs build new MVP
+3. The implementation itself
+4. A brief README with:
+   - how to run locally
+   - how to run in Docker
+   - required env vars
+   - how the sample folder mount works
+   - example tool calls / usage
+5. A short explanation of design decisions and tradeoffs
+
+Expected project shape:
+- package.json
+- tsconfig.json
+- src/
+  - index.ts
+  - server.ts
+  - tools/
+  - services/
+  - utils/
+- Dockerfile
+- .env.example
+- README.md
+
+Suggested initial tools:
+- list_files({ subpath?: string, pattern?: string })
+- upload_file_to_smartling({ path: string, fileType: string })
+
+Implementation notes:
+- Start with the smallest working version
+- Do not add extra features like recursive context extraction, parsing many file formats, or job polling unless required for the MVP
+- If Smartling upload needs assumptions because of missing internal details, isolate them in a Smartling service and document them
+- If there is an internal SDK/client already available, use it instead of writing a new one
+- If there is an internal MCP pattern, follow that pattern
+
+Process I want from you:
+- First inspect existing internal code/docs/tickets
+- Then tell me whether we should reuse something or start fresh
+- Then implement the MVP
+- While working, explain important findings and decisions briefly
+- Be practical and concrete, not theoretical
+
+Success criteria:
+- I can run the MCP server locally
+- I can mount a sample folder
+- I can list files from that folder via MCP
+- I can upload one chosen file to Smartling via MCP
+- The code is small, understandable, and safe

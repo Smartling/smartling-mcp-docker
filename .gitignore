@@ -1,0 +1,14 @@
+dist
+node_modules
+coverage
+.env
+*.js.map
+*.d.ts
+!nest-cli.json
+!tsconfig*.json
+
+# IDE
+.idea/
+
+# Generated output
+output/
