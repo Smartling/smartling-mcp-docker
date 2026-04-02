@@ -1,0 +1,16 @@
+name: Claude PR Review with Progress Tracking
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+concurrency:
+  group: claude-code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: |
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.fork == false
+    uses: Smartling/claude-pr-review/.github/workflows/claude-code-review.yml@main
+    secrets: inherit
