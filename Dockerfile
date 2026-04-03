@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:20-slim
+FROM --platform=linux/amd64 node:22-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/* && \
     curl -fsSL https://smartling-connectors-releases.s3.amazonaws.com/cli/smartling.linux \
