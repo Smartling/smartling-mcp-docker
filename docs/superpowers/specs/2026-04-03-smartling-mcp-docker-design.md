@@ -221,13 +221,17 @@ CMD ["node", "src/index.js"]
         "-e", "SMARTLING_SECRET",
         "-v", "/my/project:/my/project",
         "smartling-mcp"
-      ]
+      ],
+      "env": {
+        "SMARTLING_USER_ID": "your-user-id",
+        "SMARTLING_SECRET": "your-secret"
+      }
     }
   }
 }
 ```
 
-`SMARTLING_USER_ID` and `SMARTLING_SECRET` are forwarded from the host environment without embedding values in config.
+Credentials go in the `env` section of the MCP config. Claude Code sets these as environment variables before running `docker`, then `-e SMARTLING_USER_ID` / `-e SMARTLING_SECRET` (no value) forwards them into the container.
 
 ---
 
