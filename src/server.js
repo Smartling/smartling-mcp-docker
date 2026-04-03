@@ -112,11 +112,14 @@ export function createServer(execFileFn = execFileAsync) {
   server.registerTool(
     'smartling-cli-ls',
     {
-      description: 'List files in a directory. Defaults to current working directory if no path given.',
-      inputSchema: { path: z.string().optional().describe('Directory path to list, e.g. /my/project/src') }
+      description: 'List files in a directory. Only works within /smartling. Defaults to /smartling if no path given.',
+      inputSchema: { path: z.string().optional().describe('Directory path to list, must start with /smartling, e.g. /smartling/src') }
     },
     async ({ path } = {}) => {
-      const args = path ? ['-lah', path] : ['-lah'];
+      if (path && !path.startsWith('/smartling')) {
+        return { content: [{ type: 'text', text: 'Error: path must be within /smartling' }] };
+      }
+      const args = path ? ['-lah', path] : ['-lah', '/smartling'];
       try {
         const { stdout } = await execFileFn('ls', args, { env: process.env });
         return { content: [{ type: 'text', text: stdout || '(empty directory)' }] };
