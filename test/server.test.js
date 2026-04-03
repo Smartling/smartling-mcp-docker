@@ -35,7 +35,7 @@ test('tool handler: returns stdout on success', async () => {
   });
 
   const { handleToolCall } = createServer(fakeExec);
-  const result = await handleToolCall({ name: 'smartling-cli', arguments: { args: 'projects list' } });
+  const result = await handleToolCall({ args: 'projects list' });
 
   assert.equal(result.content[0].type, 'text');
   assert.equal(result.content[0].text, 'project-id  My Project\n');
@@ -44,7 +44,7 @@ test('tool handler: returns stdout on success', async () => {
 test('tool handler: includes stderr in output', async () => {
   const fakeExec = async () => ({ stdout: 'out', stderr: 'warn' });
   const { handleToolCall } = createServer(fakeExec);
-  const result = await handleToolCall({ name: 'smartling-cli', arguments: { args: 'files list' } });
+  const result = await handleToolCall({ args: 'files list' });
   assert.ok(result.content[0].text.includes('out'));
   assert.ok(result.content[0].text.includes('warn'));
 });
@@ -58,7 +58,7 @@ test('tool handler: returns exit code on non-zero exit', async () => {
     throw err;
   };
   const { handleToolCall } = createServer(fakeExec);
-  const result = await handleToolCall({ name: 'smartling-cli', arguments: { args: 'files list -p bad-id' } });
+  const result = await handleToolCall({ args: 'files list -p bad-id' });
   assert.ok(result.content[0].text.includes('Exit code 1'));
   assert.ok(result.content[0].text.includes('project not found'));
 });
@@ -70,13 +70,13 @@ test('tool handler: handles spawn failure gracefully', async () => {
     throw err;
   };
   const { handleToolCall } = createServer(fakeExec);
-  const result = await handleToolCall({ name: 'smartling-cli', arguments: { args: 'projects list' } });
+  const result = await handleToolCall({ args: 'projects list' });
   assert.ok(result.content[0].text.includes('Failed to run smartling-cli'));
 });
 
 test('tool handler: returns (no output) when both stdout and stderr are empty', async () => {
   const fakeExec = async () => ({ stdout: '', stderr: '' });
   const { handleToolCall } = createServer(fakeExec);
-  const result = await handleToolCall({ name: 'smartling-cli', arguments: { args: 'files delete old.json' } });
+  const result = await handleToolCall({ args: 'files delete old.json' });
   assert.equal(result.content[0].text, '(no output)');
 });

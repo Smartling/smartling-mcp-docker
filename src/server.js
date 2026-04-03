@@ -1,5 +1,5 @@
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 
@@ -81,29 +81,10 @@ EXAMPLES
   files pull "**.json" -l es-ES -p my-project-id
   mt translate /my/project/en.json -l es-ES fr-FR -p my-project-id`;
 
-const TOOL_DEFINITION = {
-  name: 'smartling-cli',
-  description: TOOL_DESCRIPTION,
-  inputSchema: {
-    type: 'object',
-    properties: {
-      args: {
-        type: 'string',
-        description: 'Arguments to pass to smartling-cli, exactly as on the command line.'
-      }
-    },
-    required: ['args']
-  }
-};
-
 export function createServer(execFileFn = execFileAsync) {
-  const server = new Server(
-    { name: 'smartling-mcp', version: '1.0.0' },
-    { capabilities: { tools: {} } }
-  );
+  const server = new McpServer({ name: 'smartling-mcp', version: '1.0.0' });
 
-  async function handleToolCall(request) {
-    const { args } = request.arguments;
+  async function handleToolCall({ args }) {
     const argsArray = splitArgs(args);
 
     try {
@@ -119,8 +100,14 @@ export function createServer(execFileFn = execFileAsync) {
     }
   }
 
-  server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [TOOL_DEFINITION] }));
-  server.setRequestHandler(CallToolRequestSchema, async (request) => handleToolCall(request.params));
+  server.registerTool(
+    'smartling-cli',
+    {
+      description: TOOL_DESCRIPTION,
+      inputSchema: { args: z.string().describe('Arguments to pass to smartling-cli, exactly as on the command line.') }
+    },
+    handleToolCall
+  );
 
   return { server, handleToolCall };
 }
