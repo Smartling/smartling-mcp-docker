@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { resolve } from 'path';
 
 const execFileAsync = promisify(execFile);
 
@@ -139,10 +140,11 @@ export function createServer(execFileFn = execFileAsync) {
       inputSchema: { path: z.string().optional().describe('Directory path to list, must start with /smartling, e.g. /smartling/src') }
     },
     async ({ path } = {}) => {
-      if (path && !path.startsWith('/smartling')) {
+      const resolved = resolve(path ?? '/smartling');
+      if (resolved !== '/smartling' && !resolved.startsWith('/smartling/')) {
         return { content: [{ type: 'text', text: 'Error: path must be within /smartling' }] };
       }
-      const args = path ? ['-lah', path] : ['-lah', '/smartling'];
+      const args = ['-lah', resolved];
       try {
         const { stdout } = await execFileFn('ls', args, { env: process.env });
         return { content: [{ type: 'text', text: stdout || '(empty directory)' }] };
