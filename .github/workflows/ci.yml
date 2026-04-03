@@ -32,7 +32,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/smartling-docker-mcp
+          images: smartlinginc/smartling-docker-mcp
           tags: |
             type=sha,prefix=
             type=raw,value=latest,enable={{is_default_branch}}

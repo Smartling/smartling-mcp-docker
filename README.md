@@ -16,12 +16,10 @@ A Docker-based MCP (Model Context Protocol) server that wraps the [`smartling-cl
 
 ## Setup
 
-### 1. Build the image
+### 1. Pull the image
 
 ```bash
-git clone https://github.com/Smartling/smartling-mcp-docker
-cd smartling-mcp-docker
-docker build -t smartling-mcp .
+docker pull smartlinginc/smartling-docker-mcp
 ```
 
 ### 2. Configure Claude Desktop
@@ -39,7 +37,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
-        "smartling-mcp"
+        "smartlinginc/smartling-docker-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
@@ -70,7 +68,7 @@ Add to your project's `.claude/settings.json` or run `/mcp` in Claude Code:
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
-        "smartling-mcp"
+        "smartlinginc/smartling-docker-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
@@ -98,20 +96,35 @@ Once configured, ask Claude naturally:
 ```
 PROJECTS
   projects list                          List all projects in the account
-  projects info -p <project-id>          Show project details
-  projects locales -p <project-id>       List target locales
+  projects info                          Show details about the current project
+  projects locales                       List target locales
+    -s, --short                          Locale IDs only
+    --source                             Source locale only
+    --format '<go-template>'             Custom output format
 
 FILES
-  files list [mask] -p <project-id>      List files in project
-  files push <file> -p <project-id>      Upload a file
-  files pull <mask> -p <project-id>      Download translated files
-  files delete <mask> -p <project-id>    Delete files
-  files rename <old> <new>               Rename a file URI
-  files status -p <project-id>           Show translation progress
+  files list ['<mask>']                  List files in project
+    --short                              URIs only
+  files push <file> [<uri>]              Upload a file
+    --type <type>                        Override file type (e.g. json, plaintext)
+    -b, --branch <prefix>                Add branch prefix; @auto detects git branch
+    --directive <directive>              Set file-level directive
+  files pull ['<mask>']                  Download translated files
+    --source                             Download source only
+    -l <locale>                          Target locale (repeatable)
+  files delete ['<mask>']               Delete files
+  files rename <old-uri> <new-uri>       Rename a file URI
+  files status                           Show translation progress
 
 MT (Machine Translation)
-  mt detect <file>                       Detect source language
-  mt translate <file> -p <project-id>    Machine translate a file
+  mt detect '<mask>'                     Detect source language
+    -s, --short                          Output locale code only
+    --output table|json                  Output format
+  mt translate '<mask>'                  Machine translate files
+    -l, --target-locale <locale>         Target locale (repeatable)
+    --source-locale <locale>             Source language (auto-detected if omitted)
+    --input-directory <dir>              Source directory
+    --output-directory <dir>             Output directory
 
 GLOBAL FLAGS
   -a, --account <account-id>             Override account ID
