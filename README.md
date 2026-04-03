@@ -51,6 +51,13 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 
 > **Important:** The volume mount must map to `/smartling` inside the container. The `smartling-ls` tool only works within that path.
 
+To use a custom `smartling.yml` (e.g. with file type mappings), mount it into `/app/smartling.yml` inside the container:
+
+```json
+"-v", "/absolute/path/to/your/project:/smartling",
+"-v", "/absolute/path/to/smartling.yml:/app/smartling.yml",
+```
+
 Restart Claude Desktop after editing the config.
 
 ### 3. Configure Claude Code
@@ -68,6 +75,32 @@ Add to your project's `.claude/settings.json` or run `/mcp` in Claude Code:
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
+        "smartlinginc/smartling-docker-mcp"
+      ],
+      "env": {
+        "SMARTLING_USER_ID": "your-user-id",
+        "SMARTLING_SECRET": "your-secret",
+        "SMARTLING_PROJECT_ID": "your-project-id"
+      }
+    }
+  }
+}
+```
+
+With a custom `smartling.yml`:
+
+```json
+{
+  "mcpServers": {
+    "smartling": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "SMARTLING_USER_ID",
+        "-e", "SMARTLING_SECRET",
+        "-e", "SMARTLING_PROJECT_ID",
+        "-v", "/absolute/path/to/your/project:/smartling",
+        "-v", "/absolute/path/to/smartling.yml:/app/smartling.yml",
         "smartlinginc/smartling-docker-mcp"
       ],
       "env": {
