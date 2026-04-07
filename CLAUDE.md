@@ -2,10 +2,11 @@
 
 ## What this MCP does
 
-Wraps the `smartling-cli` binary. Two tools are available:
+Wraps the `smartling-cli` binary. Three tools are available:
 
 - **`smartling-cli`** — run any smartling-cli command as a string
 - **`smartling-ls`** — list files under `/smartling` (the mounted project directory)
+- **`smartling-cat`** — print the contents of a file inside `/smartling`
 
 ## File access
 
@@ -19,7 +20,7 @@ files push /smartling/en/strings.json --type json
 files push ./en/strings.json
 ```
 
-Use `smartling-ls` (optionally with a path) to discover what files are available before operating on them.
+Use `smartling-ls` (optionally with a path) to discover what files are available before operating on them. Use `smartling-cat` to inspect file contents.
 
 ## Credentials
 
@@ -31,6 +32,11 @@ Use `smartling-ls` (optionally with a path) to discover what files are available
 ```
 smartling-ls                              # list /smartling
 smartling-ls path=/smartling/en          # list a subdirectory
+```
+
+**Read a file:**
+```
+smartling-cat path=/smartling/en/strings.json
 ```
 
 **Upload a file:**

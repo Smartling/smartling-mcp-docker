@@ -13,6 +13,7 @@ A Docker-based MCP (Model Context Protocol) server that wraps [`smartling-cli`](
 |---|---|
 | `smartling-cli` | Run any `smartling-cli` command (projects, files, mt) |
 | `smartling-ls` | List files in `/smartling` or a subdirectory |
+| `smartling-cat` | Print the contents of a file inside `/smartling` |
 
 ## Setup
 
@@ -49,7 +50,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-> **Important:** The volume mount must map to `/smartling` inside the container. The `smartling-ls` tool only works within that path.
+> **Important:** The volume mount must map to `/smartling` inside the container. The `smartling-ls` and `smartling-cat` tools only work within that path.
 
 To use a custom `smartling.yml` (e.g. with file type mappings), mount it into `/app/smartling.yml` inside the container:
 
