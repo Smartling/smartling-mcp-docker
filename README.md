@@ -20,7 +20,7 @@ A Docker-based MCP (Model Context Protocol) server that wraps [`smartling-cli`](
 ### 1. Pull the image
 
 ```bash
-docker pull smartlinginc/smartling-docker-mcp
+docker pull smartlinginc/smartling-cli-mcp
 ```
 
 ### 2. Configure Claude Desktop
@@ -38,7 +38,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
-        "smartlinginc/smartling-docker-mcp"
+        "smartlinginc/smartling-cli-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
@@ -76,7 +76,7 @@ Add to your project's `.claude/settings.json` or run `/mcp` in Claude Code:
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
-        "smartlinginc/smartling-docker-mcp"
+        "smartlinginc/smartling-cli-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
@@ -102,7 +102,7 @@ With a custom `smartling.yml`:
         "-e", "SMARTLING_PROJECT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
         "-v", "/absolute/path/to/smartling.yml:/app/smartling.yml",
-        "smartlinginc/smartling-docker-mcp"
+        "smartlinginc/smartling-cli-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
