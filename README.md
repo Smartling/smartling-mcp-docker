@@ -37,13 +37,15 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
         "-e", "SMARTLING_USER_ID",
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
+        "-e", "SMARTLING_ACCOUNT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
         "smartlinginc/smartling-cli-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
         "SMARTLING_SECRET": "your-secret",
-        "SMARTLING_PROJECT_ID": "your-project-id"
+        "SMARTLING_PROJECT_ID": "your-project-id",
+        "SMARTLING_ACCOUNT_ID": "your-account-id"
       }
     }
   }
@@ -51,6 +53,8 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 ```
 
 > **Important:** The volume mount must map to `/smartling` inside the container. The `smartling-ls` and `smartling-cat` tools only work within that path.
+>
+> `SMARTLING_ACCOUNT_ID` is required for most commands (`files push`, `projects list`, `glossaries *`, etc.). The MCP server injects it automatically as `-a <account-id>` — it is not natively supported by the CLI as an env var.
 
 To use a custom `smartling.yml` (e.g. with file type mappings), mount it into `/app/smartling.yml` inside the container:
 
@@ -75,13 +79,15 @@ Add to your project's `.claude/settings.json` or run `/mcp` in Claude Code:
         "-e", "SMARTLING_USER_ID",
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
+        "-e", "SMARTLING_ACCOUNT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
         "smartlinginc/smartling-cli-mcp"
       ],
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
         "SMARTLING_SECRET": "your-secret",
-        "SMARTLING_PROJECT_ID": "your-project-id"
+        "SMARTLING_PROJECT_ID": "your-project-id",
+        "SMARTLING_ACCOUNT_ID": "your-account-id"
       }
     }
   }
@@ -100,6 +106,7 @@ With a custom `smartling.yml`:
         "-e", "SMARTLING_USER_ID",
         "-e", "SMARTLING_SECRET",
         "-e", "SMARTLING_PROJECT_ID",
+        "-e", "SMARTLING_ACCOUNT_ID",
         "-v", "/absolute/path/to/your/project:/smartling",
         "-v", "/absolute/path/to/smartling.yml:/app/smartling.yml",
         "smartlinginc/smartling-cli-mcp"
@@ -107,7 +114,8 @@ With a custom `smartling.yml`:
       "env": {
         "SMARTLING_USER_ID": "your-user-id",
         "SMARTLING_SECRET": "your-secret",
-        "SMARTLING_PROJECT_ID": "your-project-id"
+        "SMARTLING_PROJECT_ID": "your-project-id",
+        "SMARTLING_ACCOUNT_ID": "your-account-id"
       }
     }
   }
@@ -120,8 +128,8 @@ Once configured, ask Claude naturally:
 
 - *"List my Smartling projects"*
 - *"Show files available for translation"*
-- *"Push /smartling/en/strings.json to Smartling"*
-- *"Pull Spanish translations for all JSON files"*
+- *"Push /smartling/en/strings.json to Smartling with URI en/strings.json"*
+- *"Pull Spanish translations for all JSON files into /smartling"*
 - *"Check translation status for my project"*
 - *"Machine translate /smartling/en/strings.json to French"*
 
@@ -159,6 +167,33 @@ MT (Machine Translation)
     --source-locale <locale>             Source language (auto-detected if omitted)
     --input-directory <dir>              Source directory
     --output-directory <dir>             Output directory
+
+GLOSSARIES
+  glossaries list                        List glossaries in the account
+    --name <name>                        Filter by name
+    --output simple|table|json           Output format
+  glossaries create <name>               Create a new glossary
+    --locale <locale>                    Add a locale (repeatable)
+    --description <text>                 Optional description
+    --verification-mode                  Enable verification mode
+    --fallback-locale <from>:<to[,to]>   Fallback locale mapping (repeatable)
+  glossaries export <uid|name> [file]    Export glossary entries to a file
+    --file-type csv|xlsx|tbx             Export file format (required)
+    --tbx-version v2|v3                  TBX version (required when --file-type=tbx)
+    --focus-locale <locale>              Focus locale for the export
+    --locale <locale>                    Include locale in export (repeatable)
+    --skip-entries                       Skip glossary entries in the export
+    --filter-query <text>                Filter entries by free-text query
+    --filter-entry-state <state>         Filter entries by state
+    --filter-locale <locale>             Filter by locale ID (repeatable)
+    --filter-entry-uid <uid>             Filter by entry UID (repeatable)
+    --filter-missing-translation-locale  Filter: locale missing a translation
+    --filter-present-translation-locale  Filter: locale with a translation
+    --filter-created-date <RFC3339>      Filter by created date
+    --filter-last-modified-date <RFC3339> Filter by last modified date
+  glossaries import <uid|name> <file>    Import glossary from CSV/XLSX/TBX
+    --archive-mode                       Archive entries missing from the file
+    --media-type <type>                  Override media type detection
 
 GLOBAL FLAGS
   -a, --account <account-id>             Override account ID
